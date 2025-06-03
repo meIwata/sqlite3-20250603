@@ -13,3 +13,21 @@ CREATE TABLE movie_quotes (
     votes INTEGER DEFAULT 0
 );
 ```
+
+5. 用 SQLite 在 movie_quotes table 新增一筆資料，要確認電影台詞不重複再新增，只要給我SQL 不用程式碼。
+```sql
+INSERT INTO movie_quotes (provider, movie_name, quote)
+SELECT '提供者', '電影名稱', '電影台詞'
+WHERE NOT EXISTS (
+    SELECT 1 FROM movie_quotes WHERE quote = '電影台詞'
+);
+```
+6. 用 SQLite 在 movie_quotes table 刪除重複的電影台詞，只要給我SQL不用程式碼
+```sql
+DELETE FROM movie_quotes
+WHERE id NOT IN (
+    SELECT MIN(id)
+    FROM movie_quotes
+    GROUP BY quote
+);
+```
